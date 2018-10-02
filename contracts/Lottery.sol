@@ -14,12 +14,12 @@ contract Lottery {
   }
 
   function pickWinner() public onlyManager {
-    uint index = generateRandomNumber() % players.length;
+    uint index = randomNumber() % players.length;
     players[index].transfer(address(this).balance);
     players = new address[](0);
   }
 
-  function generateRandomNumber() private view returns (uint) {
+  function randomNumber() private view returns (uint) {
     return uint(keccak256(block.difficulty, now, players));
   }
 
