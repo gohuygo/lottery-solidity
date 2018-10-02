@@ -13,9 +13,7 @@ contract Lottery {
     players.push(msg.sender);
   }
 
-  function pickWinner() public {
-    require(msg.sender == manager);
-
+  function pickWinner() public onlyManager {
     uint index = generateRandomNumber() % players.length;
     players[index].transfer(address(this).balance);
     players = new address[](0);
@@ -23,5 +21,14 @@ contract Lottery {
 
   function generateRandomNumber() private view returns (uint) {
     return uint(keccak256(block.difficulty, now, players));
+  }
+
+  modifier onlyManager() {
+    require(msg.sender == manager);
+    _;
+  }
+
+  function getPlayers() public view returns (address[]) {
+    return players;
   }
 }
